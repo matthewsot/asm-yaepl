@@ -20,21 +20,26 @@ write-line $len //Write $len to the console
 ```
 
 # Functions
-Consider ``str-len`` from above (assuming strings are terminated by a ``\0`` character):
+Consider a simple ``index-of`` function:
 
 ```
-@str-len $str:
-    move 0 $len
+@index-of $arr $search:
+    copy 0 -> $i
+    len $arr -> $arr_len
 
     #loop
-    array-el $str $len -> $currChar
-    not-eq $currChar '\0' -> $continue
-    add $len 1 -> $len
+    array-el $arr $i -> $currEl
+    not-eq $currEl $search -> $continue
+    add $i 1 -> $i
+    lt $i $arr_len -> $still_legal
+    and $still_legal $continue -> $continue
     jump-if $continue #loop
     
-    return ($len - 1)
+    add $i -1 -> $i
+    
+    return $i
 @end
 
-str-len "Hi!" -> $len
-write-line $len //3
+index-of "Hi!" "i" -> $index
+write-line $index //2
 ```

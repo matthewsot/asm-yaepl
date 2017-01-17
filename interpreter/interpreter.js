@@ -27,6 +27,8 @@ Yaepl.prototype.globalScope = {
     "lt-eq": function (a, b) { return (a <= b); },
     "gt": function (a, b) { return (a > b); },
     "gt-eq": function (a, b) { return (a >= b); },
+    "or": function (a, b) { return (a || b); },
+    "and": function (a, b) { return (a && b); },
     "jump-if": function (a, b) {
         if (a) {
             for (var i = b.targetIndex; i < this.fullText.length; i++) {
@@ -83,8 +85,11 @@ Yaepl.prototype.splitParams = function (params) {
     return split_params;
 };
 Yaepl.prototype.interpretLine = function (line, addToHistory) {
-    console.log("Interpreting: " + line);
     if (addToHistory !== false) this.fullText.push(line);
+    var startComment = line.indexOf("//");
+    if (startComment > -1) {
+        line = line.substring(0, startComment);
+    }
     line = line.trim();
     if (line.startsWith("@") && line.indexOf("@end") == -1) {
         this.flags.inFunc = true;
