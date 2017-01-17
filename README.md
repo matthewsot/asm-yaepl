@@ -27,8 +27,9 @@ Consider ``str-len`` from above (assuming strings are terminated by a ``\0`` cha
     move 0 $len
 
     #loop
-    move ($str[$len] != "\0") $continue
-    move (1 + $len) $len
+    array-el $str $len -> $currChar
+    not-eq $currChar '\0' -> $continue
+    add $len 1 -> $len
     jump-if $continue #loop
     
     return ($len - 1)
