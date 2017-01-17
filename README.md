@@ -43,3 +43,43 @@ Consider a simple ``index-of`` function:
 index-of "Hi!" "i" -> $index
 write-line $index //2
 ```
+
+# Built-in functions reference:
+```
+//Value functions
+copy $a
+len $a
+
+//IO functions
+write-line $str
+
+//Numerical functions
+add $a $b
+
+//String functions
+str-combine $str1 $str2 //Alias for add (in Javascript)
+str-len $str //Alias for len (in Javascript)
+
+//Array functions
+array-len $arr //Alias for len (in Javascript)
+array-el $arr $index
+array-push $arr $item
+array-pop $arr
+
+//Comparison functions
+eq $a $b
+not-eq $a $b
+lt $a $b
+lt-eq $a $b
+gt $a $b
+gt-eq $a $b
+or $a $b
+and $a $b
+
+//Conversion functions
+num-to-str $num
+str-to-num $str
+
+//Control functions
+jump-if $condition #label
+```

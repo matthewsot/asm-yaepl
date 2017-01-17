@@ -11,6 +11,7 @@ function Yaepl(opts) {
 }
 Yaepl.prototype.globalScope = {
     "add": function (a, b) { return a + b; },
+    "str-combine": function (a, b) { return a + b; },
     "copy": function (a) { return a; },
     "write-line": function (a) { this.options.log(a); },
     "num-to-str": function (a) { return a.toString(); },
