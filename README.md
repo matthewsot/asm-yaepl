@@ -58,6 +58,9 @@ write-line $str
 
 //Numerical functions
 add $a $b
+subtract $a $b
+multiply $a $b
+divide $a $b
 
 //String functions
 str-combine $str1 $str2 //Alias for add (in Javascript)
