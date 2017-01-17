@@ -29,6 +29,7 @@ Yaepl.prototype.globalScope = {
     "array-pop": function (a) { return a.pop(); },
     "eq": function (a, b) { return (a == b); },
     "not-eq": function (a, b) { return (a != b); },
+    "not": function (a) { return !a; },
     "lt": function (a, b) { return (a < b); },
     "lt-eq": function (a, b) { return (a <= b); },
     "gt": function (a, b) { return (a > b); },

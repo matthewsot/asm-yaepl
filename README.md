@@ -77,6 +77,7 @@ array-pop $arr
 //Comparison functions
 eq $a $b
 not-eq $a $b
+not $a
 lt $a $b
 lt-eq $a $b
 gt $a $b
