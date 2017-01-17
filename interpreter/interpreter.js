@@ -50,19 +50,19 @@ Yaepl.prototype.globalScope = {
     },
     "jump-fwd-if": function (a, l) {
         if (!a) return;
-        this.globalScope["jump-fwd"](l);
+        this.globalScope["jump-fwd"].call(this, l);
     },
     "jump": function (l) {
-        label_target = this.scopes[this.currScopeIndex][l];
+        var label_target = this.scopes[this.currScopeIndex][l];
         if (label_target == undefined) {
-            this.globalScope["jump-fwd"](l);
+            this.globalScope["jump-fwd"].call(this, l);
             return;
         }
-        this.globalScope["jump-bwd"](label_target);
+        this.globalScope["jump-bwd"].call(this, label_target);
     },
     "jump-if": function (a, l) {
         if (!a) return;
-        this.globalScope["jump"](l);
+        this.globalScope["jump"].call(this, l);
     }
 };
 Yaepl.prototype.splitParams = function (params) {
