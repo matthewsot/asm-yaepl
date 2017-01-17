@@ -1,7 +1,7 @@
 function Yaepl(opts) {
     this.options = opts;
     this.flags = {
-        inFunc = false
+        inFunc: false
     };
     this.scopes = [ {} ];
     this.currScopeIndex = 0;
@@ -9,9 +9,76 @@ function Yaepl(opts) {
     this.fullText = [];
 }
 Yaepl.prototype.globalScope = {
-    "add": function (a, b) { return a + b; }
+    "add": function (a, b) { return a + b; },
+    "copy": function (a) { return a; },
+    "write-line": function (a) { console.log(a); },
+    "num-to-str": function (a) { return a.toString(); },
+    "str-to-num": function (a) { return parseFloat(a); },
+    "str-len": function (a) { return a.length; },
+    "array-len": function (a) { return a.length; },
+    "array-el": function (a, b) { return a[b]; },
+    "array-push": function (a, b) { a.push(b); },
+    "array-pop": function (a) { return a.pop(); },
+    "eq": function (a, b) { return (a == b); },
+    "not-eq": function (a, b) { return (a != b); },
+    "lt": function (a, b) { return (a < b); },
+    "lt-eq": function (a, b) { return (a <= b); },
+    "gt": function (a, b) { return (a > b); },
+    "gt-eq": function (a, b) { return (a >= b); },
+    "jump-if": function (a, b) {
+        if (a) {
+            var label = this.scopes[this.currScopeIndex][b];
+        }
+    }
 };
-Yaepl.prototype.interpretLine(line) {
+Yaepl.prototype.splitParams = function (params) {
+    var split_params = [];
+    var curr_param = "";
+    var in_dbl_quotes = false;
+    var in_single_quotes = false;
+    var escaped = false;
+    for (var i = 0; i < params.length; i++) {
+        var chr = params[i];
+        curr_param += chr;
+        if (escaped) {
+            escaped = false;
+            continue;
+        }
+        if (chr == "\\") {
+            escaped = true;
+            true;
+        }
+        if (in_dbl_quotes && chr == '"') {
+            in_dbl_quotes = false;
+            split_params.push(curr_param);
+            curr_param = "";
+            continue;
+        }
+        if (in_single_quotes && chr == "'") {
+            in_single_quotes = false;
+            split_params.push(curr_param);
+            curr_param = "";
+            continue;
+        }
+        if (!in_single_quotes && !in_dbl_quotes && chr == '"') {
+            in_dbl_quotes = true;
+            continue;
+        }
+        if (!in_single_quotes && !in_dbl_quotes && chr == "'") {
+            in_single_quotes = true;
+            continue;
+        }
+        if (!in_single_quotes && !in_dbl_quotes && chr == " ") {
+            split_params.push(curr_param.trim());
+            curr_param = "";
+        }
+    }
+    if (curr_param.trim().length > 0) {
+        split_params.push(curr_param.trim());
+    }
+    return split_params;
+};
+Yaepl.prototype.interpretLine = function (line) {
     this.fullText.push(line);
     line = line.trim();
     if (line.startsWith("@") && line.indexOf("@end") == -1) {
@@ -49,15 +116,20 @@ Yaepl.prototype.interpretLine(line) {
         return;
     }
     var op = line.split(" ")[0];
-    var params = line.split(" ")[1].split("->")[0].trim().split(" ");
+    var params = this.splitParams(line.substring(op.length).split("->")[0].trim());
     for (var p = 0; p < params.length; p++) {
-        params[0] = this.scopes[this.currScopeIndex][params[0]];
+        if (params[p].startsWith("$") || params[p].startsWith("#")) {
+            params[p] = this.scopes[this.currScopeIndex][params[p]];
+        } else {
+            params[p] = eval(params[p]);
+        }
     }
+    console.log(params);
     var storeIn = line.split("->");
     if (storeIn.length > 1) {
         storeIn = storeIn[1].trim();
     } else {
-        storeIn = null
+        storeIn = null;
     }
     if (this.globalScope[op] != undefined) {
         var ret = this.globalScope[op].apply(this, params);

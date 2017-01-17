@@ -13,10 +13,10 @@ An educational programming language combining the simplicity of assembler with t
 # Hello, World!
 Writes "Hello, World!" followed by the length of "Hello, World!"
 ```
-write-line "Hello, World!" -> console //Write "Hello, World!" to the console
+write-line "Hello, World!" //Write "Hello, World!" to the console
 str-len "Hello, World!" -> $len //Store the length of "Hello, World!" as $len
 int-to-str $len -> $len //Convert $len to a string before writing it
-write-line $len -> console //Write $len to the console
+write-line $len //Write $len to the console
 ```
 
 # Functions
