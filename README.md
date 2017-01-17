@@ -89,5 +89,12 @@ num-to-str $num
 str-to-num $str
 
 //Control functions
+jump-bwd #label
+jump-bwd-if $condition #label
+
+jump-fwd #label
+jump-fwd-if $condition #label
+
+jump #label
 jump-if $condition #label
 ```

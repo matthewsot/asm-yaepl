@@ -35,12 +35,34 @@ Yaepl.prototype.globalScope = {
     "gt-eq": function (a, b) { return (a >= b); },
     "or": function (a, b) { return (a || b); },
     "and": function (a, b) { return (a && b); },
-    "jump-if": function (a, b) {
-        if (a) {
-            for (var i = b.targetIndex; i < this.fullText.length; i++) {
-                this.interpretLine(this.fullText[i], false);
-            }
+    "jump-bwd": function (b) {
+        for (var i = b.targetIndex; i < this.fullText.length; i++) {
+            this.interpretLine(this.fullText[i], false);
         }
+    },
+    "jump-bwd-if": function (a, b) {
+        if (!a) return;
+        this.globalScope["jump-bwd"](b);
+    },
+    "jump-fwd": function (l) {
+        this.flags.jumpingFwd = true;
+        this.jumpFwdUntil = l;
+    },
+    "jump-fwd-if": function (a, l) {
+        if (!a) return;
+        this.globalScope["jump-fwd"](l);
+    },
+    "jump": function (l) {
+        label_target = this.scopes[this.currScopeIndex][l];
+        if (label_target == undefined) {
+            this.globalScope["jump-fwd"](l);
+            return;
+        }
+        this.globalScope["jump-bwd"](label_target);
+    },
+    "jump-if": function (a, l) {
+        if (!a) return;
+        this.globalScope["jump"](l);
     }
 };
 Yaepl.prototype.splitParams = function (params) {
@@ -92,6 +114,13 @@ Yaepl.prototype.splitParams = function (params) {
 };
 Yaepl.prototype.interpretLine = function (line, addToHistory) {
     if (addToHistory !== false) this.fullText.push(line);
+    if (this.flags.jumpingFwd && !line.startsWith(this.jumpFwdUntil + ":")) {
+        return;
+    } else if (this.flags.jumpingFwd) {
+        this.flags.jumpingFwd = false;
+        this.jumpFwdUntil = false;
+        return;
+    }
     var startComment = line.indexOf("//");
     if (startComment > -1) {
         line = line.substring(0, startComment);
@@ -140,6 +169,9 @@ Yaepl.prototype.interpretLine = function (line, addToHistory) {
             params[p] = eval(params[p]);
         }
     }
+    if ([ "jump-fwd", "jump-fwd-if", "jump", "jump-if" ].indexOf(op) > -1) {
+        params[params.length - 1] = this.splitParams(line.substring(op.length).split("->")[0].trim())[params.length - 1];
+    }
     var storeIn = line.split("->");
     if (storeIn.length > 1) {
         storeIn = storeIn[1].trim();
@@ -179,7 +211,6 @@ Yaepl.prototype.interpretLine = function (line, addToHistory) {
         }
     }
     if (op == "return") {
-        console.log(params[0]);
         return params[0];
     }
 };
