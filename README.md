@@ -1,6 +1,8 @@
 # asm-yaepl
 An educational programming language combining the simplicity of assembler with the power/safety of Javascript.
 
+[Test it here](https://matthewsot.github.io/asm-yaepl/test.html)
+
 # Design goals
 - Focus on keeping syntax out of the way of the concepts
 - Non-OO, focus on basic "thinking like a programmer" rather than more complex ideas about objects and inheritance
