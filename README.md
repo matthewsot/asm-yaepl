@@ -33,4 +33,8 @@ Consider ``str-len`` from above (assuming strings are terminated by a ``\0`` cha
     jump-if $continue #loop
     
     return ($len - 1)
+@end
+
+str-len "Hi!" -> $len
+write-line $len //3
 ```

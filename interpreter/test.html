@@ -14,15 +14,15 @@
 <script src="interpreter.js" type="text/javascript"></script>
 <script type="text/javascript">
 var yaepl = new Yaepl({
-log: function (a) {
-    var li = document.createElement("li");
-    li.textContent = a;
-    document.getElementById("resp").appendChild(li);
-}
+    log: function (a) {
+        var li = document.createElement("li");
+        li.textContent = a;
+        document.getElementById("resp").appendChild(li);
+    }
 });
 document.getElementById("go").onclick = function() {
     var lines = document.getElementById("main").value.split("\n");
-    document.getElementById("resp").innerHtml = "";
+    document.getElementById("resp").textContent = "";
     for (var l = 0; l < lines.length; l++) {
         yaepl.interpretLine(lines[l]);
     }
