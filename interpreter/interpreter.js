@@ -23,6 +23,7 @@ Yaepl.prototype.globalScope = {
     "str-len": function (a) { return a.length; },
     "array-len": function (a) { return a.length; },
     "array-el": function (a, b) { return a[b]; },
+    "array-set-el": function (a, b, i) { a[b] = i; },
     "array-push": function (a, b) { a.push(b); },
     "array-pop": function (a) { return a.pop(); },
     "eq": function (a, b) { return (a == b); },

@@ -69,6 +69,7 @@ str-len $str //Alias for len (in Javascript)
 //Array functions
 array-len $arr //Alias for len (in Javascript)
 array-el $arr $index
+array-set-el $arr $index $item
 array-push $arr $item
 array-pop $arr
 
