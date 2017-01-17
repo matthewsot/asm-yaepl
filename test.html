@@ -48,7 +48,7 @@ var examples = {
 
     "simple-loop": "copy 1 -> $iteration\ncopy 5 -> $end_at\n\n#loop-start:\nwrite-line $iteration\nadd $iteration 1 -> $iteration\nlt-eq $iteration $end_at -> $continue\njump-if $continue #loop-start",
 
-    "index-of": "@index-of $arr $search:\n    copy 0 -> $i\n    len $arr -> $arr_len\n\n    #loop\n    array-el $arr $i -> $currEl\n    not-eq $currEl $search -> $continue\n    add $i 1 -> $i\n    lt $i $arr_len -> $still_legal\n    and $still_legal $continue -> $continue\n    jump-if $continue #loop\n\n    add $i -1 -> $i\n\n    return $i\n@end\n\nindex-of \"Hi!\" \"i\" -> $index\nwrite-line $index"
+    "index-of": "@index-of $arr $search:\n    copy 0 -> $i\n    len $arr -> $arr_len\n\n    #loop\n    array-el $arr $i -> $currEl\n    not-eq $currEl $search -> $mismatch\n    add $i 1 -> $i\n    lt $i $arr_len -> $more_chars_exist\n    and $mismatch $more_chars_exist -> $continue\n    jump-if $continue #loop\n\n    add $i -1 -> $i\n\n    return $i\n@end\n\nindex-of \"Hi!\" \"i\" -> $index\nwrite-line $index"
 };
 
 document.getElementById("hello-world").onclick = function () {
