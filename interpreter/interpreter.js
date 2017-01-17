@@ -29,7 +29,9 @@ Yaepl.prototype.globalScope = {
     "gt-eq": function (a, b) { return (a >= b); },
     "jump-if": function (a, b) {
         if (a) {
-            var label = this.scopes[this.currScopeIndex][b];
+            for (var i = b.targetIndex; i < this.fullText.length; i++) {
+                this.interpretLine(this.fullText[i], false);
+            }
         }
     }
 };
@@ -80,8 +82,9 @@ Yaepl.prototype.splitParams = function (params) {
     }
     return split_params;
 };
-Yaepl.prototype.interpretLine = function (line) {
-    this.fullText.push(line);
+Yaepl.prototype.interpretLine = function (line, addToHistory) {
+    console.log("Interpreting: " + line);
+    if (addToHistory !== false) this.fullText.push(line);
     line = line.trim();
     if (line.startsWith("@") && line.indexOf("@end") == -1) {
         this.flags.inFunc = true;
@@ -141,33 +144,27 @@ Yaepl.prototype.interpretLine = function (line) {
     }
     if (this.scopes[this.currScopeIndex][op] != undefined) {
         var item = this.scopes[this.currScopeIndex][op];
-        switch (item.type) {
-            case "function":
-                var prevScopeIndex = this.currScopeIndex;
-                var newScope = {};
-                for (var i = 0; i < item.params.length; i++) {
-                    if (i < params.length) {
-                        newScope[item.params[i]] = params[i];
-                    } else { //Technically we could just do params.length and ignore this if (as they'd be undefined by default), but that feels wrong
-                        newScope[item.params[i]] = undefined;
-                    }
-                }
-                //In another scope
-                this.scopes.push(newScope);
-                this.currScopeIndex = this.scopes.length - 1;
-                var ret = null;
-                for (var i = 0; i < item.contents.length; i++) {
-                    ret = this.interpretLine(item.contents[i]);
-                }
-                this.scopes.splice(this.currScopeIndex, 1);
-                this.currScopeIndex = prevScopeIndex;
-                //Back to our scope
-                if (storeIn != null) {
-                    this.scopes[this.currScopeIndex][storeIn] = ret;
-                }
-                break;
-            case "label":
-                break;
+        var prevScopeIndex = this.currScopeIndex;
+        var newScope = {};
+        for (var i = 0; i < item.params.length; i++) {
+            if (i < params.length) {
+                newScope[item.params[i]] = params[i];
+            } else { //Technically we could just do params.length and ignore this if (as they'd be undefined by default), but that feels wrong
+                newScope[item.params[i]] = undefined;
+            }
+        }
+        //In another scope
+        this.scopes.push(newScope);
+        this.currScopeIndex = this.scopes.length - 1;
+        var ret = null;
+        for (var i = 0; i < item.contents.length; i++) {
+            ret = this.interpretLine(item.contents[i]);
+        }
+        this.scopes.splice(this.currScopeIndex, 1);
+        this.currScopeIndex = prevScopeIndex;
+        //Back to our scope
+        if (storeIn != null) {
+            this.scopes[this.currScopeIndex][storeIn] = ret;
         }
     }
     if (op == "return") {
