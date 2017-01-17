@@ -17,6 +17,7 @@ Yaepl.prototype.globalScope = {
     "str-combine": function (a, b) { return a + b; },
     "copy": function (a) { return a; },
     "write-line": function (a) { this.options.log(a); },
+    "prompt-str": function (a) { return promt(a); },
     "num-to-str": function (a) { return a.toString(); },
     "str-to-num": function (a) { return parseFloat(a); },
     "len": function (a) { return a.length; },

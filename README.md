@@ -55,6 +55,7 @@ len $a
 
 //IO functions
 write-line $str
+prompt-str $prompt
 
 //Numerical functions
 add $a $b
