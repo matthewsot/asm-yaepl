@@ -1,5 +1,6 @@
 function Yaepl(opts) {
     this.options = opts;
+    this.options.log = this.options.log || console.log;
     this.flags = {
         inFunc: false
     };
@@ -11,7 +12,7 @@ function Yaepl(opts) {
 Yaepl.prototype.globalScope = {
     "add": function (a, b) { return a + b; },
     "copy": function (a) { return a; },
-    "write-line": function (a) { console.log(a); },
+    "write-line": function (a) { this.options.log(a); },
     "num-to-str": function (a) { return a.toString(); },
     "str-to-num": function (a) { return parseFloat(a); },
     "str-len": function (a) { return a.length; },
@@ -124,7 +125,6 @@ Yaepl.prototype.interpretLine = function (line) {
             params[p] = eval(params[p]);
         }
     }
-    console.log(params);
     var storeIn = line.split("->");
     if (storeIn.length > 1) {
         storeIn = storeIn[1].trim();
