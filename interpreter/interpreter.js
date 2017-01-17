@@ -114,18 +114,18 @@ Yaepl.prototype.splitParams = function (params) {
 };
 Yaepl.prototype.interpretLine = function (line, addToHistory) {
     if (addToHistory !== false) this.fullText.push(line);
-    if (this.flags.jumpingFwd && !line.startsWith(this.jumpFwdUntil + ":")) {
+    var startComment = line.indexOf("//");
+    if (startComment > -1) {
+        line = line.substring(0, startComment);
+    }
+    line = line.trim();
+    if (this.flags.jumpingFwd && !line == this.jumpFwdUntil + ":" && !line == this.jumpFwdUntil) {
         return;
     } else if (this.flags.jumpingFwd) {
         this.flags.jumpingFwd = false;
         this.jumpFwdUntil = false;
         return;
     }
-    var startComment = line.indexOf("//");
-    if (startComment > -1) {
-        line = line.substring(0, startComment);
-    }
-    line = line.trim();
     if (line.startsWith("@") && line.indexOf("@end") == -1) {
         this.flags.inFunc = true;
         var name = line.split(" ")[0];
