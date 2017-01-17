@@ -114,13 +114,14 @@ Yaepl.prototype.splitParams = function (params) {
     return split_params;
 };
 Yaepl.prototype.interpretLine = function (line, addToHistory) {
+    line = line.replace(/\s/, " ");
     if (addToHistory !== false) this.fullText.push(line);
     var startComment = line.indexOf("//");
     if (startComment > -1) {
         line = line.substring(0, startComment);
     }
     line = line.trim();
-    if (this.flags.jumpingFwd && !line == this.jumpFwdUntil + ":" && !line == this.jumpFwdUntil) {
+    if (this.flags.jumpingFwd && line != this.jumpFwdUntil + ":" && line != this.jumpFwdUntil) {
         return;
     } else if (this.flags.jumpingFwd) {
         this.flags.jumpingFwd = false;
