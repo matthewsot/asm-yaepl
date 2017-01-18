@@ -43,7 +43,7 @@ Yaepl.prototype.globalScope = {
     },
     "jump-bwd-if": function (a, b) {
         if (!a) return;
-        this.globalScope["jump-bwd"](b);
+        this.globalScope["jump-bwd"].call(this, b);
     },
     "jump-fwd": function (l) {
         this.flags.jumpingFwd = true;
@@ -121,13 +121,6 @@ Yaepl.prototype.interpretLine = function (line, addToHistory) {
         line = line.substring(0, startComment);
     }
     line = line.trim();
-    if (this.flags.jumpingFwd && line != this.jumpFwdUntil + ":" && line != this.jumpFwdUntil) {
-        return;
-    } else if (this.flags.jumpingFwd) {
-        this.flags.jumpingFwd = false;
-        this.jumpFwdUntil = false;
-        return;
-    }
     if (line.startsWith("@") && line.indexOf("@end") == -1) {
         this.flags.inFunc = true;
         var name = line.split(" ")[0];
@@ -160,6 +153,13 @@ Yaepl.prototype.interpretLine = function (line, addToHistory) {
             targetIndex: this.fullText.length - 1 + 1, //Set the jump target to the line after the label
             type: "label"
         };
+        if (this.flags.jumpingFwd && line.split(":")[0] == this.jumpFwdUntil) {
+            this.flags.jumpingFwd = false;
+            this.jumpFwdUntil = false;
+        }
+        return;
+    }
+    if (this.flags.jumpingFwd) {
         return;
     }
     var op = line.split(" ")[0];
