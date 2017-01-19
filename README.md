@@ -15,11 +15,11 @@ An educational programming language combining the simplicity of assembler with t
 # Hello, World! (Bonus!)
 Writes "Hello, World!" followed by the length of "Hello, World!"
 ```
-write-line "Hello, World!" //Write "Hello, World!" to the console
+write-str "Hello, World!" //Write "Hello, World!" to the console
 
 str-len "Hello, World!" -> $len //Store the length of "Hello, World!" as $len
 num-to-str $len -> $len //Convert $len to a string before writing it
-write-line $len //Write $len to the console
+write-str $len //Write $len to the console
 ```
 
 # Functions
@@ -44,7 +44,7 @@ Consider a simple ``index-of`` function:
 @end
 
 index-of "Hi!" "i" -> $index
-write-line $index //2
+write-str $index //2
 ```
 
 # Built-in functions reference:
@@ -54,7 +54,7 @@ copy $a
 len $a
 
 //IO functions
-write-line $str
+write-str $str
 prompt-str $prompt
 
 //Numerical functions

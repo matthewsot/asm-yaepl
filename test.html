@@ -42,13 +42,13 @@ document.getElementById("go").onclick = function() {
 };
 
 var examples = {
-    "hello-world": "write-line \"Hello, World!\"",
+    "hello-world": "write-str \"Hello, World!\"",
 
-    "simple-function": "@make-happier $text:\n    str-combine $text \" It's a beautiful day today.\" -> $text\n    return $text\n@end\n\nmake-happier \"Hello, World!\" -> $happier\nwrite-line $happier",
+    "simple-function": "@make-happier $text:\n    str-combine $text \" It's a beautiful day today.\" -> $text\n    return $text\n@end\n\nmake-happier \"Hello, World!\" -> $happier\nwrite-str $happier",
 
-    "simple-loop": "copy 1 -> $iteration\ncopy 5 -> $end_at\n\n#loop-start:\nwrite-line $iteration\nadd $iteration 1 -> $iteration\nlt-eq $iteration $end_at -> $continue\njump-if $continue #loop-start",
+    "simple-loop": "copy 1 -> $iteration\ncopy 5 -> $end_at\n\n#loop-start:\nwrite-str $iteration\nadd $iteration 1 -> $iteration\nlt-eq $iteration $end_at -> $continue\njump-if $continue #loop-start",
 
-    "index-of": "@index-of $arr $search:\n    copy 0 -> $i\n    len $arr -> $arr_len\n\n    #loop\n    array-el $arr $i -> $currEl\n    not-eq $currEl $search -> $mismatch\n    add $i 1 -> $i\n    lt $i $arr_len -> $more_chars_exist\n    and $mismatch $more_chars_exist -> $continue\n    jump-if $continue #loop\n\n    add $i -1 -> $i\n\n    return $i\n@end\n\nindex-of \"Hi!\" \"i\" -> $index\nwrite-line $index"
+    "index-of": "@index-of $arr $search:\n    copy 0 -> $i\n    len $arr -> $arr_len\n\n    #loop\n    array-el $arr $i -> $currEl\n    not-eq $currEl $search -> $mismatch\n    add $i 1 -> $i\n    lt $i $arr_len -> $more_chars_exist\n    and $mismatch $more_chars_exist -> $continue\n    jump-if $continue #loop\n\n    add $i -1 -> $i\n\n    return $i\n@end\n\nindex-of \"Hi!\" \"i\" -> $index\nwrite-str $index"
 };
 
 document.getElementById("hello-world").onclick = function () {
