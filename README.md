@@ -1,13 +1,15 @@
 # asm-yaepl
-An educational programming language combining the simplicity of assembler with the power/safety of Javascript.
+An educational programming language combining the simplicity of assembly language with the power/safety of Javascript.
 
 [Test it here](https://matthewsot.github.io/asm-yaepl/test.html)
+
+# YAEPL Project
+I'm planning to teach computer science to middle schoolers over the summer, and was somewhat frustrated with the languages available. To that end, I'm drawing up a few new programming languages (see [YAEPL](https://github.com/matthewsot/YAEPL)) and building prototypes for the ones that seem most promising.
 
 # Design goals
 - Focus on keeping syntax out of the way of the concepts
 - Non-OO, focus on basic "thinking like a programmer" rather than more complex ideas about objects and inheritance
 - Concepts in which many languages differ in implementation (like pass-by-value vs. pass-by-reference) should be default mimic C and Javascript but should be configurable in the compiler/interpreter.
-- Should roughly translate to C and Javascript
 
 # Toolset goals
 - A REPL that runs in a webpage
@@ -35,6 +37,7 @@ Consider a simple ``index-of`` function:
     not-eq $currEl $search -> $continue
     add $i 1 -> $i
     lt $i $arr_len -> $still_legal
+
     and $still_legal $continue -> $continue
     jump-if $continue #loop
     

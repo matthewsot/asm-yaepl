@@ -67,43 +67,34 @@ Yaepl.prototype.globalScope = {
     }
 };
 Yaepl.prototype.splitParams = function (params) {
+    var split_params = params.split(" ");
     var split_params = [];
     var curr_param = "";
-    var in_dbl_quotes = false;
-    var in_single_quotes = false;
-    var escaped = false;
+    var flags = { dbl_quotes: false, single_quotes: false, escaped: false };
     for (var i = 0; i < params.length; i++) {
         var chr = params[i];
         curr_param += chr;
-        if (escaped) {
-            escaped = false;
+        if (flags.escaped) {
+            flags.escaped = false;
             continue;
         }
-        if (chr == "\\") {
-            escaped = true;
-            true;
+        flags.escaped = (chr == "\\");
+        if (flags.escaped) {
+            curr_param = curr_param.substring(0, curr_param.length - 1);
         }
-        if (in_dbl_quotes && chr == '"') {
-            in_dbl_quotes = false;
+        else if ((flags.dbl_quotes && chr == '"') || (flags.single_quotes && chr == "'")) {
+            flags.dbl_quotes = false;
+            flags.single_quotes = false;
             split_params.push(curr_param);
             curr_param = "";
-            continue;
         }
-        if (in_single_quotes && chr == "'") {
-            in_single_quotes = false;
-            split_params.push(curr_param);
-            curr_param = "";
-            continue;
+        else if (!flags.single_quotes && chr == '"') {
+            flags.dbl_quotes = true;
         }
-        if (!in_single_quotes && !in_dbl_quotes && chr == '"') {
-            in_dbl_quotes = true;
-            continue;
+        else if (!flags.dbl_quotes && chr == "'") {
+            flags.single_quotes = true;
         }
-        if (!in_single_quotes && !in_dbl_quotes && chr == "'") {
-            in_single_quotes = true;
-            continue;
-        }
-        if (!in_single_quotes && !in_dbl_quotes && chr == " ") {
+        else if (!flags.single_quotes && !flags.dbl_quotes && chr == " ") {
             split_params.push(curr_param.trim());
             curr_param = "";
         }
