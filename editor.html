@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YAEPL Editor</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://gitcdn.xyz/repo/codemirror/CodeMirror/master/lib/codemirror.css"/>
+    <style>
+        .CodeMirror.cm-s-default { cursor: text; }
+        .CodeMirror-gutters { cursor: default; }
+    </style>
+</head>
+<body>
+    <textarea id="editor"></textarea>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.27.4/codemirror.min.js"></script>
+    <script src="mode.js"></script>
+    <script>
+        editorArea = document.getElementById("editor");
+        var editor = CodeMirror.fromTextArea(editorArea, {
+            lineNumbers: true,
+            autofocus: true,
+            mode: 'yaepl',
+        });
+    </script>
+</body>
+</html>

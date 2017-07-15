@@ -1,76 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Test</title>
-<style type="text/css">
-a { color: blue; }
-</style>
+    <title>Test</title>
+    <style type="text/css">
+        a { color: blue; }
+    </style>
 </head>
 <body>
-<textarea id="main" autofill="false" style="width: 650px;height: 300px;">
-</textarea>
-<br/><br/>
-<ul id="resp">
-</ul>
-<br/>
-<button id="go">Execute</button>
-<br/><br/>
-Load &amp; execute examples:
-<ul>
-    <li><a href="#hello-world" id="hello-world">Hello, World!</a>
-    <li><a href="#simple-function" id="simple-function">Simple function example</a>
-    <li><a href="#simple-loop" id="simple-loop">Simple loop example</a>
-    <li><a href="#index-of" id="index-of">'Index Of' function</a>
-</ul>
-<script src="interpreter/interpreter.js" type="text/javascript"></script>
-<script type="text/javascript">
-var lines = document.getElementById("main").value = "";
-document.getElementById("go").onclick = function() {
-    var lines = document.getElementById("main").value.split("\n");
-    document.getElementById("resp").textContent = "";
-    
-    var yaepl = new Yaepl({
-        log: function (a) {
-            var li = document.createElement("li");
-            li.textContent = a;
-            document.getElementById("resp").appendChild(li);
+    <textarea id="main" autofill="false" style="width: 650px;height: 300px;">
+    </textarea>
+    <br/><br/>
+    <ul id="resp">
+    </ul>
+    <br/>
+    <button id="go">Execute</button>
+    <br/><br/>
+    Load &amp; execute examples:
+    <ul>
+        <li><a href="#hello-world" id="hello-world">Hello, World!</a>
+        <li><a href="#simple-function" id="simple-function">Simple function example</a>
+        <li><a href="#simple-loop" id="simple-loop">Simple loop example</a>
+        <li><a href="#index-of" id="index-of">'Index Of' function</a>
+    </ul>
+    <script src="interpreter/interpreter.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    var lines = document.getElementById("main").value = "";
+    document.getElementById("go").onclick = function() {
+        var lines = document.getElementById("main").value.split("\n");
+        document.getElementById("resp").textContent = "";
+        
+        var yaepl = new Yaepl({
+            log: function (a) {
+                var li = document.createElement("li");
+                li.textContent = a;
+                document.getElementById("resp").appendChild(li);
+            }
+        });
+        for (var l = 0; l < lines.length; l++) {
+            yaepl.interpretLine(lines[l]);
         }
-    });
-    for (var l = 0; l < lines.length; l++) {
-        yaepl.interpretLine(lines[l]);
-    }
-};
+    };
 
-var examples = {
-    "hello-world": "write-str \"Hello, World!\"",
+    var examples = {
+        "hello-world": "write-str \"Hello, World!\"",
 
-    "simple-function": "@make-happier $text:\n    str-combine $text \" It's a beautiful day today.\" -> $text\n    return $text\n@end\n\nmake-happier \"Hello, World!\" -> $happier\nwrite-str $happier",
+        "simple-function": "@make-happier $text:\n    str-combine $text \" It's a beautiful day today.\" -> $text\n    return $text\n@end\n\nmake-happier \"Hello, World!\" -> $happier\nwrite-str $happier",
 
-    "simple-loop": "copy 1 -> $iteration\ncopy 5 -> $end_at\n\n#loop-start:\nwrite-str $iteration\nadd $iteration 1 -> $iteration\nlt-eq $iteration $end_at -> $continue\njump-if $continue #loop-start",
+        "simple-loop": "copy 1 -> $iteration\ncopy 5 -> $end_at\n\n#loop-start:\nwrite-str $iteration\nadd $iteration 1 -> $iteration\nlt-eq $iteration $end_at -> $continue\njump-if $continue #loop-start",
 
-    "index-of": "@index-of $arr $search:\n    copy 0 -> $i\n    len $arr -> $arr_len\n\n    #loop\n    array-el $arr $i -> $currEl\n    not-eq $currEl $search -> $mismatch\n    add $i 1 -> $i\n    lt $i $arr_len -> $more_chars_exist\n    and $mismatch $more_chars_exist -> $continue\n    jump-if $continue #loop\n\n    add $i -1 -> $i\n\n    return $i\n@end\n\nindex-of \"Hi!\" \"i\" -> $index\nwrite-str $index"
-};
+        "index-of": "@index-of $arr $search:\n    copy 0 -> $i\n    len $arr -> $arr_len\n\n    #loop\n    array-el $arr $i -> $currEl\n    not-eq $currEl $search -> $mismatch\n    add $i 1 -> $i\n    lt $i $arr_len -> $more_chars_exist\n    and $mismatch $more_chars_exist -> $continue\n    jump-if $continue #loop\n\n    add $i -1 -> $i\n\n    return $i\n@end\n\nindex-of \"Hi!\" \"i\" -> $index\nwrite-str $index"
+    };
 
-document.getElementById("hello-world").onclick = function () {
-    document.getElementById("main").value = examples["hello-world"];
-    document.getElementById("go").onclick();
-    return false;
-};
-document.getElementById("simple-function").onclick = function () {
-    document.getElementById("main").value = examples["simple-function"];
-    document.getElementById("go").onclick();
-    return false;
-};
-document.getElementById("simple-loop").onclick = function () {
-    document.getElementById("main").value = examples["simple-loop"];
-    document.getElementById("go").onclick();
-    return false;
-};
-document.getElementById("index-of").onclick = function () {
-    document.getElementById("main").value = examples["index-of"];
-    document.getElementById("go").onclick();
-    return false;
-};
-</script>
+    document.getElementById("hello-world").onclick = function () {
+        document.getElementById("main").value = examples["hello-world"];
+        document.getElementById("go").onclick();
+        return false;
+    };
+    document.getElementById("simple-function").onclick = function () {
+        document.getElementById("main").value = examples["simple-function"];
+        document.getElementById("go").onclick();
+        return false;
+    };
+    document.getElementById("simple-loop").onclick = function () {
+        document.getElementById("main").value = examples["simple-loop"];
+        document.getElementById("go").onclick();
+        return false;
+    };
+    document.getElementById("index-of").onclick = function () {
+        document.getElementById("main").value = examples["index-of"];
+        document.getElementById("go").onclick();
+        return false;
+    };
+    </script>
 </body>
 </html>
