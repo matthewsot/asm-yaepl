@@ -5,29 +5,33 @@
 keywords = [ 'write-out' ]
 CodeMirror.defineMode("yaepl", function (){
     handleStr = function (stream, chr) {
-        stream.next()
-        match = new RegExp("[^" + chr + "\\\\]")
-        stream.eatWhile(match)
+        stream.next();
+        match = new RegExp("[^" + chr + "\\\\]");
+        stream.eatWhile(match);
         while (stream.peek() == "\\") {
-            stream.next()
-            stream.next()
-            eaten = stream.eatWhile(match)
+            stream.next();
+            stream.next();
+            eaten = stream.eatWhile(match);
         }
-        stream.next()
+        stream.next();
+        return "string";
     };
     return {
         startState: function() { return { s_qt: false, d_qt: false} },
         token: function(stream, state) {
-            if (stream.peek() == "'") {
-                handleStr(stream, "'")
-                return "string";
+            if (stream.peek() == "'" || stream.peek() == "\"") {
+                return handleStr(stream, stream.peek());
             }
-            if (stream.peek() == "\"") {
-                handleStr(stream, "\"")
-                return "string";
+            if (stream.sol()) {
+                stream.eatWhile(/\s/);
+                stream.eatWhile(/[^\s]/);
+                return "keyword function name";
             }
-            stream.next()
-            return;
+            stream.eatWhile(/[^\s]/);
+            if (keywords.indexOf(stream.current()) != -1) {
+                return "keyword";
+            }
+            stream.next();
         }
     };
 });
