@@ -1,6 +1,7 @@
 function Yaepl(opts) {
     this.options = opts;
     this.options.log = this.options.log || console.log;
+    this.options.prompt = this.options.prompt || window.prompt;
     this.flags = {
         inFunc: false
     };
@@ -17,7 +18,7 @@ Yaepl.prototype.globalScope = {
     "str-combine": function (a, b) { return a + b; },
     "copy": function (a) { return a; },
     "write-str": function (a) { this.options.log(a); },
-    "prompt-str": function (a) { return promt(a); },
+    "prompt-str": function (a) { return this.options.prompt(a); },
     "num-to-str": function (a) { return a.toString(); },
     "str-to-num": function (a) { return parseFloat(a); },
     "len": function (a) { return a.length; },

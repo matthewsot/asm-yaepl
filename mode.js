@@ -2,7 +2,7 @@
  * JavaScript:
  */
 
-keywords = [ 'write-out' ]
+keywords = [ '->' ]
 CodeMirror.defineMode("yaepl", function (){
     handleStr = function (stream, chr) {
         stream.next();
