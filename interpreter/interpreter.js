@@ -117,7 +117,7 @@ Yaepl.prototype.evaluateParams = function (op, line, params) {
     //The final param for a jump op is the label, we store that as a string
     //since it might not be in the scope yet (if it's a jump-fwd)
     var isJump = [ "jump-fwd", "jump-fwd-if", "jump", "jump-if" ].indexOf(op) > -1;
-    var end = isJump ? 0 : 1;
+    var end = isJump ? 1 : 0;
 
     for (var p = 0; p < params.length - end; p++) {
         if (params[p].startsWith("'") || params[p].startsWith("\"")) {
