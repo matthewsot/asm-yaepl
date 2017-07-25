@@ -25,7 +25,11 @@
         var editor = CodeMirror.fromTextArea(editorArea, {
             lineNumbers: true,
             autofocus: true,
-            mode: 'yaepl',
+            mode: "yaepl",
+        });
+        editor.setValue(localStorage.getItem("cached-program") || "");
+        editor.on("change", function () {
+            localStorage.setItem("cached-program", editor.getValue());
         });
             
         document.getElementById("terminal").innerHTML = "";
