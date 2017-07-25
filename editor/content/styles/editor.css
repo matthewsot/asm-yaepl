@@ -37,4 +37,5 @@ main {
     border-radius: 5px;
     background-color: black;
     text-align: left;
+    overflow: hidden;
 }
