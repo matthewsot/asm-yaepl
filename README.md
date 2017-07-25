@@ -1,7 +1,10 @@
 # asm-yaepl
 An educational programming language combining the simplicity of assembly language with the power/safety of Javascript.
 
-[Test it here](https://matthewsot.github.io/asm-yaepl/test.html)
+[Test it here](https://matthewsot.github.io/asm-yaepl/editor/editor.html)
+
+# Editor App
+The editor is also available as an Electron app [here](https://github.com/matthewsot/yaepl-app).
 
 # YAEPL Project
 I'm planning to teach computer science to middle schoolers over the summer, and was somewhat frustrated with the languages available. To that end, I'm drawing up a few new programming languages (see [YAEPL](https://github.com/matthewsot/YAEPL)) and building prototypes for the ones that seem most promising.
