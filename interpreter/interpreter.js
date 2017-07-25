@@ -158,10 +158,11 @@ Yaepl.prototype.interpretLine = function (line, callback, addToHistory) {
     var op = line.split(" ")[0];
     var params = this.splitParams(line.substring(op.length).split("->")[0].trim());
     for (var p = 0; p < params.length; p++) {
-        if (params[p].startsWith("$") || params[p].startsWith("#")) {
-            params[p] = this.scopes[this.currScopeIndex][params[p]];
-        } else {
+        if (params[p].startsWith("'") || params[p].startsWith("\"")) {
             params[p] = eval(params[p]);
+        }
+        else {
+            params[p] = this.scopes[this.currScopeIndex][params[p]];
         }
     }
     if ([ "jump-fwd", "jump-fwd-if", "jump", "jump-if" ].indexOf(op) > -1) {
