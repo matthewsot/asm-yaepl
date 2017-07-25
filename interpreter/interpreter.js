@@ -1,7 +1,7 @@
 function Yaepl(opts) {
     this.options = opts;
-    this.options.log = this.options.log || console.log;
-    this.options.prompt = this.options.prompt || window.prompt;
+    this.options.logHandle = this.options.outHandle || console.log;
+    this.options.promptHandle = this.options.promptHandle || function (a, callback) { callback(window.prompt(a)); };
     this.flags = {
         inFunc: false
     };
@@ -10,6 +10,7 @@ function Yaepl(opts) {
     this.currFunc = null;
     this.fullText = [];
 }
+Yaepl.prototype.callbackOps = [ "prompt-str" ];
 Yaepl.prototype.globalScope = {
     "add": function (a, b) { return a + b; },
     "subtract": function (a, b) { return a - b; },
@@ -17,8 +18,8 @@ Yaepl.prototype.globalScope = {
     "divide": function (a, b) { return a / b; },
     "str-combine": function (a, b) { return a + b; },
     "copy": function (a) { return a; },
-    "write-str": function (a) { this.options.log(a); },
-    "prompt-str": function (a) { return this.options.prompt(a); },
+    "write-str": function (a) { this.options.outHandle(a); },
+    "prompt-str": function (a, callback) { this.options.promptHandle(a, callback); },
     "num-to-str": function (a) { return a.toString(); },
     "str-to-num": function (a) { return parseFloat(a); },
     "len": function (a) { return a.length; },
@@ -105,7 +106,7 @@ Yaepl.prototype.splitParams = function (params) {
     }
     return split_params;
 };
-Yaepl.prototype.interpretLine = function (line, addToHistory) {
+Yaepl.prototype.interpretLine = function (line, callback, addToHistory) {
     line = line.replace(/\s/, " ");
     if (addToHistory !== false) this.fullText.push(line);
     var startComment = line.indexOf("//");
@@ -128,16 +129,16 @@ Yaepl.prototype.interpretLine = function (line, addToHistory) {
             contents: [ ],
             type: "function"
         };
-        return;
+        return callback();
     }
     if (this.flags.inFunc && line.indexOf("@end") > -1) {
         this.flags.inFunc = false;
         this.scopes[this.currScopeIndex][this.currFunc.name] = this.currFunc;
-        return;
+        return callback();
     }
     if (this.flags.inFunc) {
         this.currFunc.contents.push(line);
-        return;
+        return callback();
     }
     if (line.startsWith("#")) {
         this.scopes[this.currScopeIndex][line.split(":")[0]] = {
@@ -149,10 +150,10 @@ Yaepl.prototype.interpretLine = function (line, addToHistory) {
             this.flags.jumpingFwd = false;
             this.jumpFwdUntil = false;
         }
-        return;
+        return callback();
     }
     if (this.flags.jumpingFwd) {
-        return;
+        return callback();
     }
     var op = line.split(" ")[0];
     var params = this.splitParams(line.substring(op.length).split("->")[0].trim());
@@ -172,11 +173,21 @@ Yaepl.prototype.interpretLine = function (line, addToHistory) {
     } else {
         storeIn = null;
     }
-    if (this.globalScope[op] != undefined) {
+    if (this.globalScope[op] != undefined && this.callbackOps.indexOf(op) == -1) {
         var ret = this.globalScope[op].apply(this, params);
         if (storeIn != null) {
             this.scopes[this.currScopeIndex][storeIn] = ret;
         }
+        return callback();
+    }
+    if (this.globalScope[op] != undefined && this.callbackOps.indexOf(op) != -1) {
+        params.push(function (callback, ret) {
+            if (storeIn != null) {
+                this.scopes[this.currScopeIndex][storeIn] = ret;
+            }
+            callback();
+        }.bind(this, callback));
+        var ret = this.globalScope[op].apply(this, params);
         return;
     }
     if (this.scopes[this.currScopeIndex][op] != undefined) {
@@ -205,6 +216,7 @@ Yaepl.prototype.interpretLine = function (line, addToHistory) {
         }
     }
     if (op == "return") {
+        callback(params[0]);
         return params[0];
     }
 };

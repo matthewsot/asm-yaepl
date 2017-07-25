@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YAEPL Editor</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="content/styles/codemirror.css"/>
+    <link rel="stylesheet" href="content/styles/editor.css" />
+</head>
+<body>
+    <h1>Code Editor</h1>
+    <main>
+        <textarea id="editor"></textarea>
+        <div id="terminal"></div>
+    </main>
+
+    <button id="run">Run Code</button>
+    <button id="step">Step Through Code</button>
+
+    <script src="content/codemirror.min.js"></script>
+    <script src="mode.js"></script>
+    <script src="interpreter.js"></script>
+    <script src="content/terminal.js"></script>
+    <script>
+        editorArea = document.getElementById("editor");
+        var editor = CodeMirror.fromTextArea(editorArea, {
+            lineNumbers: true,
+            autofocus: true,
+            mode: 'yaepl',
+        });
+    
+        document.getElementById("run").onclick = function() {
+            document.getElementById("terminal").innerHTML = "";
+            window.term = new Terminal();
+            document.getElementById("terminal").appendChild(term.html);
+
+            var lines = editor.getValue().split('\n');
+            
+            var yaepl = new Yaepl({
+                outHandle: function (str) { window.term.print(str); },
+                promptHandle: function (str, callback) {
+                    window.term.input(str, function (ret) {
+                        callback(ret);
+                    });
+                }
+            });
+
+            var l = 0;
+            var maxL = lines.length;
+            function interpretLine(l) {
+                console.log("Interpreting " + lines[l]);
+                yaepl.interpretLine(lines[l], function () {
+                    console.log("CALLBACK")
+                    l++;
+                    if (l < maxL) {
+                        interpretLine(l);
+                    }
+                });
+            }
+            interpretLine(0);
+        };
+    </script>
+</body>
+</html>
