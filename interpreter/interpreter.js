@@ -41,7 +41,7 @@ Yaepl.prototype.globalScope = {
     "gt-eq": function (a, b) { return (a >= b); },
     "or": function (a, b) { return (a || b); },
     "and": function (a, b) { return (a && b); },
-    "jump-bwd": function (b) {
+    "jump-bwd": function (b, callback) {
         var lines = this.fullText;
         var yaepl = this;
         function interpretLine(l) {
@@ -49,14 +49,16 @@ Yaepl.prototype.globalScope = {
                 l++;
                 if (l < lines.length) {
                     interpretLine(l);
+                } else {
+                    callback();
                 }
             }, false);
         }
         interpretLine(b.targetIndex);
     },
-    "jump-bwd-if": function (a, b) {
-        if (!a) return;
-        this.globalScope["jump-bwd"].call(this, b);
+    "jump-bwd-if": function (a, b, callback) {
+        if (!a) return callback();
+        this.globalScope["jump-bwd"].call(this, b, callback);
     },
     "jump-fwd": function (l) {
         this.flags.jumpingFwd = true;
@@ -66,22 +68,22 @@ Yaepl.prototype.globalScope = {
         if (!a) return;
         this.globalScope["jump-fwd"].call(this, l);
     },
-    "jump": function (l) {
+    "jump": function (l, callback) {
         var label_target = this.scopes[this.currScopeIndex][l];
         if (label_target == undefined) {
             this.globalScope["jump-fwd"].call(this, l);
-            return;
+            return callback();
         }
-        this.globalScope["jump-bwd"].call(this, label_target);
+        this.globalScope["jump-bwd"].call(this, label_target, callback);
     },
-    "jump-if": function (a, l) {
-        if (!a) return;
-        this.globalScope["jump"].call(this, l);
+    "jump-if": function (a, l, callback) {
+        if (!a) return callback();
+        this.globalScope["jump"].call(this, l, callback);
     }
 };
 
 //These are the ops that use callbacks
-Yaepl.prototype.callbackOps = [ "prompt" ];
+Yaepl.prototype.callbackOps = [ "prompt", "jump-bwd", "jump-bwd-if", "jump", "jump-if" ];
 
 //Splits a YAEPL parameter string into a list of different
 //string YAPEL parameters. Does NOT evaluate them - they're
