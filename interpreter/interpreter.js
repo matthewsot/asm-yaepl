@@ -19,8 +19,8 @@ Yaepl.prototype.globalScope = {
     "divide": function (a, b) { return a / b; },
     "str-combine": function (a, b) { return a + b; },
     "copy": function (a) { return a; },
-    "write-str": function (a) { this.options.outHandle(a); },
-    "prompt-str": function (a, callback) { this.options.promptHandle(a, callback); },
+    "write": function (a) { this.options.outHandle(a); },
+    "prompt": function (a, callback) { this.options.promptHandle(a, callback); },
     "num-to-str": function (a) { return a.toString(); },
     "str-to-num": function (a) { return parseFloat(a); },
     "len": function (a) { return a.length; },
@@ -30,8 +30,8 @@ Yaepl.prototype.globalScope = {
     "array-set-el": function (a, b, i) { a[b] = i; },
     "array-push": function (a, b) { a.push(b); },
     "array-pop": function (a) { return a.pop(); },
-    "eq": function (a, b) { return (a == b); },
-    "not-eq": function (a, b) { return (a != b); },
+    "eq": function (a, b) { return (a === b); },
+    "not-eq": function (a, b) { return (a !== b); },
     "not": function (a) { return !a; },
     "lt": function (a, b) { return (a < b); },
     "lt-eq": function (a, b) { return (a <= b); },
@@ -39,6 +39,7 @@ Yaepl.prototype.globalScope = {
     "gt-eq": function (a, b) { return (a >= b); },
     "or": function (a, b) { return (a || b); },
     "and": function (a, b) { return (a && b); },
+    "rand-num": function (l, h) { return Math.floor(Math.random() * (h - l)) + l; },
     "jump-bwd": function (b) {
         for (var i = b.targetIndex; i < this.fullText.length; i++) {
             this.interpretLine(this.fullText[i], function () {}, false);

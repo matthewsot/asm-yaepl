@@ -20,11 +20,11 @@ I'm planning to teach computer science to middle schoolers over the summer, and 
 # Hello, World! (Bonus!)
 Writes "Hello, World!" followed by the length of "Hello, World!"
 ```
-write-str "Hello, World!" //Write "Hello, World!" to the console
+write "Hello, World!" //Write "Hello, World!" to the console
 
 str-len "Hello, World!" -> $len //Store the length of "Hello, World!" as $len
 num-to-str $len -> $len //Convert $len to a string before writing it
-write-str $len //Write $len to the console
+write $len //Write $len to the console
 ```
 
 # Functions
@@ -50,7 +50,7 @@ Consider a simple ``index-of`` function:
 @end
 
 index-of "Hi!" "i" -> $index
-write-str $index //2
+write $index //2
 ```
 
 # Built-in functions reference:
@@ -60,14 +60,15 @@ copy $a
 len $a
 
 //IO functions
-write-str $str
-prompt-str $prompt
+write $str
+prompt $prompt
 
 //Numerical functions
 add $a $b
 subtract $a $b
 multiply $a $b
 divide $a $b
+rand-num $low $high
 
 //String functions
 str-combine $str1 $str2 //Alias for add (in Javascript)
