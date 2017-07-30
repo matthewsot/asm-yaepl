@@ -98,8 +98,6 @@ Yaepl.prototype.splitParams = function (params) {
         }
         else if (chr === flags.quote) {
             flags.quote = null;
-            split_params.push(curr_param);
-            curr_param = "";
         }
         else if (chr == "\"" || chr == "'") {
             flags.quote = chr;
