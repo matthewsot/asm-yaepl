@@ -73,7 +73,7 @@ Yaepl.prototype.globalScope = {
 };
 
 //These are the ops that use callbacks
-Yaepl.prototype.callbackOps = [ "prompt-str" ];
+Yaepl.prototype.callbackOps = [ "prompt" ];
 
 //Splits a YAEPL parameter string into a list of different
 //string YAPEL parameters. Does NOT evaluate them - they're
