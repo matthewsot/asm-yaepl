@@ -122,7 +122,7 @@ Yaepl.prototype.evaluateParams = function (op, line, params) {
     var end = isJump ? 1 : 0;
 
     for (var p = 0; p < params.length - end; p++) {
-        if (params[p].startsWith("'") || params[p].startsWith("\"")) {
+        if (params[p].startsWith("'") || params[p].startsWith("\"") || !isNaN(parseInt(params[p]))) {
             params[p] = eval(params[p]);
         }
         else {
