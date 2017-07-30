@@ -42,9 +42,17 @@ Yaepl.prototype.globalScope = {
     "or": function (a, b) { return (a || b); },
     "and": function (a, b) { return (a && b); },
     "jump-bwd": function (b) {
-        for (var i = b.targetIndex; i < this.fullText.length; i++) {
-            this.interpretLine(this.fullText[i], function () {}, false);
+        var lines = this.fullText;
+        var yaepl = this;
+        function interpretLine(l) {
+            yaepl.interpretLine(lines[l], function () {
+                l++;
+                if (l < lines.length) {
+                    interpretLine(l);
+                }
+            }, false);
         }
+        interpretLine(b.targetIndex);
     },
     "jump-bwd-if": function (a, b) {
         if (!a) return;
