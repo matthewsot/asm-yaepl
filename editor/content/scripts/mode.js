@@ -19,6 +19,17 @@ CodeMirror.defineMode("yaepl", function (){
     return {
         startState: function() { return { s_qt: false, d_qt: false} },
         token: function(stream, state) {
+            console.log(stream.current())
+            if (stream.peek() == "/") {
+                stream.next();
+                if (stream.next() == "/") {
+                    stream.eatWhile(/./);
+                    return "comment";
+                }
+                else {
+                    stream.backUp(2);
+                }
+            }
             if (stream.peek() == "'" || stream.peek() == "\"") {
                 return handleStr(stream, stream.peek());
             }
