@@ -94,7 +94,7 @@ Yaepl.prototype.splitParams = function (params) {
 
         flags.escaped = (chr == "\\");
         if (flags.escaped) {
-            curr_param = curr_param.substring(0, curr_param.length - 1);
+            //curr_param = curr_param.substring(0, curr_param.length - 1);
         }
         else if (chr === flags.quote) {
             flags.quote = null;
@@ -122,7 +122,7 @@ Yaepl.prototype.evaluateParams = function (op, line, params) {
     var end = isJump ? 1 : 0;
 
     for (var p = 0; p < params.length - end; p++) {
-        if (params[p].startsWith("'") || params[p].startsWith("\"") || !isNaN(parseInt(params[p]))) {
+        if (params[p].startsWith("'") || params[p].startsWith("\"") || !isNaN(parseInt(params[p])) || params[p] == "[]") {
             params[p] = eval(params[p]);
         }
         else {
