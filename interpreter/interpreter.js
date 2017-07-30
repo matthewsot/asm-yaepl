@@ -140,7 +140,11 @@ Yaepl.prototype.interpretLine = function (line, callback, addToHistory) {
     }
 
     if (line.indexOf("//") > -1) {
-        line = line.substring(0, line.indexOf("//"));
+        line = line.substring(0, line.indexOf("//")).trim();
+    }
+
+    if (line.length == 0) {
+        return callback();
     }
 
     //Handle the start of custom ops
