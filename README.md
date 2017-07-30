@@ -75,6 +75,7 @@ str-combine $str1 $str2 //Alias for add (in Javascript)
 str-len $str //Alias for len (in Javascript)
 
 //Array functions
+array-new
 array-len $arr //Alias for len (in Javascript)
 array-el $arr $index
 array-set-el $arr $index $item

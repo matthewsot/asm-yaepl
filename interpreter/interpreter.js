@@ -17,6 +17,7 @@ Yaepl.prototype.globalScope = {
     "subtract": function (a, b) { return a - b; },
     "multiply": function (a, b) { return a * b; },
     "divide": function (a, b) { return a / b; },
+    "rand-num": function (l, h) { return Math.floor(Math.random() * (h - l)) + l; },
     "str-combine": function (a, b) { return a + b; },
     "copy": function (a) { return a; },
     "write": function (a) { this.options.outHandle(a); },
@@ -25,6 +26,7 @@ Yaepl.prototype.globalScope = {
     "str-to-num": function (a) { return parseFloat(a); },
     "len": function (a) { return a.length; },
     "str-len": function (a) { return a.length; },
+    "array-new": function () { return []; },
     "array-len": function (a) { return a.length; },
     "array-el": function (a, b) { return a[b]; },
     "array-set-el": function (a, b, i) { a[b] = i; },
@@ -39,7 +41,6 @@ Yaepl.prototype.globalScope = {
     "gt-eq": function (a, b) { return (a >= b); },
     "or": function (a, b) { return (a || b); },
     "and": function (a, b) { return (a && b); },
-    "rand-num": function (l, h) { return Math.floor(Math.random() * (h - l)) + l; },
     "jump-bwd": function (b) {
         for (var i = b.targetIndex; i < this.fullText.length; i++) {
             this.interpretLine(this.fullText[i], function () {}, false);
