@@ -109,7 +109,7 @@ Yaepl.prototype.splitParams = function (params) {
         else if (chr === flags.quote) {
             flags.quote = null;
         }
-        else if (chr == "\"" || chr == "'") {
+        else if ((chr == "\"" || chr == "'") && flags.quote === null) {
             flags.quote = chr;
         }
         else if (flags.quote === null && chr == " ") {
